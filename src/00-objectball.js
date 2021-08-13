@@ -185,23 +185,24 @@ const playerStats = function(player) {
 const bigShoeRebounds = function() {
     const homePlayerKeys = Object.keys(gameDetails.home.players);
     const awayPlayerKeys = Object.keys(gameDetails.away.players);
-    const homeSizes = [];
-    const awaySizes =[];
+    const totalPlayers = [Object.keys(gameDetails.home.players), Object.keys(gameDetails.away.players)];
 
-    for (i = 1; i < homePlayerKeys.length; i++) {
+    const playerSizes = {};
+
+    for(i = 0; i < homePlayerKeys.length; i++) {
         const size = gameDetails.home.players[homePlayerKeys[i]].shoe;
-        homeSizes.unshift(size);
+        const player = homePlayerKeys[i];
+        playerSizes[player] = size;
     }
-    for (i = 1; i < awayPlayerKeys.length; i++) {
+    for(i = 0; i < awayPlayerKeys.length; i++) {
         const size = gameDetails.away.players[awayPlayerKeys[i]].shoe;
-        awaySizes.unshift(size);
+        const player = awayPlayerKeys[i];
+        playerSizes[player] = size;
     }
-    const totalPlayers = [...homePlayerKeys, ...awayPlayerKeys];
-    const totalSizes = [...homeSizes, ...awaySizes];
-    const biggest = totalSizes.reduce((((oldLarge, newLarge) => (oldLarge > newLarge) ? oldLarge : newLarge)), 0);
-    const key = totalSizes.findIndex((size) =>  size === biggest);
-    const player = totalPlayers[key];
-    return [[totalSizes], [totalPlayers]];
+
+    const sizes = Object.values(playerSizes);
+    const biggest = sizes.reduce((((oldLarge, newLarge) => (oldLarge > newLarge) ? oldLarge : newLarge)), 0);
+    return Object.keys(playerSizes).find(name => playerSizes[name] === biggest);
 }
 
 console.log(numPointsScored("Brendan Haywood"));
